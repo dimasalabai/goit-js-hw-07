@@ -19,15 +19,18 @@ galleryList.addEventListener("click", (e) => {
 	const image = galleryItems.find(
 		({ original }) => original === currentImageId //Отримуємо об'єкт картинки
 	);
-	openModal(image);
-});
-
-function openModal(element) {
 	const instance = basicLightbox.create(`
-	    <img src="${element.original}">
+	    <img src="${image.original}">
 	`);
 	instance.show();
-}
+
+	document.addEventListener("keyup", (e) => {
+		if (e.code === "Escape" && instance.visible()) {
+			instance.close();
+		}
+	});
+});
+
 function createMarkup(arr) {
 	return arr
 		.map(
