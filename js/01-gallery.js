@@ -12,23 +12,39 @@ galleryList.addEventListener("click", (e) => {
 	if (e.target === e.currentTarget) {
 		return;
 	}
-	const currentImage =
-		e.target.closest(".gallery__item").firstElementChild.firstElementChild;
+	// const currentImage =
+	// 	e.target.closest(".gallery__item").firstElementChild.firstElementChild;
 
-	const currentImageId = currentImage.dataset.source;
-	const image = galleryItems.find(
-		({ original }) => original === currentImageId //Отримуємо об'єкт картинки
+	// const currentImageId = currentImage.dataset.source;
+	// const image = galleryItems.find(
+	// 	({ original }) => original === currentImageId //Отримуємо об'єкт картинки
+	// );
+	const instance = basicLightbox.create(
+		`
+	    <img src="${e.target.dataset.source}">
+	`,
+		{
+			onShow: () => {
+				document.addEventListener("keydown", handleClick);
+			},
+			onClose: () => {
+				document.removeEventListener("keydown", handleClick);
+			},
+		}
 	);
-	const instance = basicLightbox.create(`
-	    <img src="${image.original}">
-	`);
 	instance.show();
 
-	document.addEventListener("keyup", (e) => {
-		if (e.code === "Escape" && instance.visible()) {
+	// document.addEventListener("keyup", (e) => {
+	// 	if (e.code === "Escape" && instance.visible()) {
+	// 		instance.close();
+	// 	}
+	// });
+
+	function handleClick(e) {
+		if (e.code === "Escape") {
 			instance.close();
 		}
-	});
+	}
 });
 
 function createMarkup(arr) {
